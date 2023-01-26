@@ -1,6 +1,7 @@
 # FitnessTracker
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.5.
+I have used Angular Material, RxJs and FlexLayout in this. Also, NgRx has been used to manage the state.
 
 ## Development server
 
