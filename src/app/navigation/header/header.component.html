@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+  <div fxHide.gt-xs>
+    <button mat-icon-button (click)="onToggleSideNav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div><a [routerLink]="['/']" mat-button class="brand">Home</a></div>
+  <!-- <div fxHide.xs>
+    <ul fxLayout class="navigation-items" fxLayoutGap="10px"></ul>
+  </div> -->
+  <span class="flex-spacer"></span>
+  <div fxHide.xs>
+    <ul fxLayout class="navigation-items" fxLayoutGap="10px">
+      <li><a [routerLink]="['training']" mat-button>Training</a></li>
+      <!-- <li><a [routerLink]="['signup']" mat-button>Sign Up</a></li> -->
+      <li><a [routerLink]="['login']" mat-button>Sign In</a></li>
+    </ul>
+  </div>
+</mat-toolbar>

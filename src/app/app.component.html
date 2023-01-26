@@ -1,27 +1,9 @@
 <mat-sidenav-container>
-  <mat-sidenav opened="false" #sidenav><p>I'm side</p> </mat-sidenav>
+  <mat-sidenav opened="false" #sidenav>
+    <app-sidenav-list (navclose)="sidenav.close()"></app-sidenav-list>
+  </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <div>
-        <button mat-icon-button (click)="sidenav.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </div>
-      <div><a [routerLink]="['/']" mat-button class="brand">Home</a></div>
-      <div>
-        <ul fxLayout class="navigation-items" fxLayoutGap="10px">
-          <li><a [routerLink]="['training']" mat-button>Training</a></li>
-        </ul>
-      </div>
-      <span class="flex-spacer"></span>
-      <div>
-        <ul fxLayout class="navigation-items" fxLayoutGap="10px">
-          <!-- <li><a [routerLink]="['signup']" mat-button>Sign Up</a></li> -->
-          <li><a [routerLink]="['login']" mat-button>Sign In</a></li>
-        </ul>
-      </div>
-    </mat-toolbar>
-
+    <app-header (sideToggleClicked)="sidenav.toggle()"></app-header>
     <main>
       <router-outlet></router-outlet>
     </main>

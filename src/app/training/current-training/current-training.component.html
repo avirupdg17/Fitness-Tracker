@@ -1,1 +1,43 @@
-<p>current-training works!</p>
+<section
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  class="current-training"
+>
+  <mat-progress-spinner
+    mode="determinate"
+    [value]="progress"
+  ></mat-progress-spinner>
+  <h1>{{ progress }}%</h1>
+  <p *ngIf="!finished; else done">Keep on going, you can do it!</p>
+  <ng-template #done>
+    <p>You have achieved it!!</p>
+  </ng-template>
+  <div class="timer-actions" fxLayout fxLayoutGap="10px">
+    <button
+      mat-raised-button
+      type="button"
+      color="accent"
+      (click)="cancelTraining()"
+    >
+      Cancel
+    </button>
+    <button
+      *ngIf="!resume"
+      mat-raised-button
+      type="button"
+      color="primary"
+      (click)="pauseTraining()"
+    >
+      Pause
+    </button>
+    <button
+      *ngIf="resume"
+      mat-raised-button
+      type="button"
+      color="primary"
+      (click)="resumeTraining()"
+    >
+      Resume
+    </button>
+  </div>
+</section>
