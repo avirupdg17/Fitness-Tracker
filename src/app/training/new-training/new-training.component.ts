@@ -9,7 +9,6 @@ import { TrainingService } from '../services/training.service';
 export class NewTrainingComponent {
   constructor(private train: TrainingService) {}
   startNewTraining() {
-    console.log('clicked');
     this.train.startTraining();
   }
   stopNewTraining() {
