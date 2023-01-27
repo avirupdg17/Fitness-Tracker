@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Exercise } from './exercise.model';
 import { TrainingService } from './services/training.service';
 
 @Component({
@@ -7,13 +9,14 @@ import { TrainingService } from './services/training.service';
   styleUrls: ['./training.component.scss'],
 })
 export class TrainingComponent implements OnInit {
-  public started: boolean;
-  constructor(private trainS: TrainingService) {
-    this.started = false;
-  }
+  public ex: Exercise = { id: '', name: '', calories: 0, duration: 0 };
+  public started: boolean = false;
+  public exerciseSubscription: Subscription = new Subscription();
+  constructor(private trainS: TrainingService) {}
   ngOnInit() {
-    this.trainS.trainingStarted.subscribe((val) => {
-      this.started = val;
+    this.exerciseSubscription = this.trainS.trainingStarted.subscribe((ex) => {
+      if (ex.id !== '') this.started = true;
+      else this.started = false;
     });
   }
 }

@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { AuthData } from '../auth-data.model';
-import { User } from '../user.model';
+import { AuthData } from '../model/auth-data.model';
+import { User } from '../model/user.model';
 import { Router } from '@angular/router';
 
 @Injectable({

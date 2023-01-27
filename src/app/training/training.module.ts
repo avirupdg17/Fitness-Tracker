@@ -7,6 +7,7 @@ import { TrainingComponent } from './training.component';
 import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { StopTrainingComponent } from './stop-training/stop-training.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { StopTrainingComponent } from './stop-training/stop-training.component';
     PastTrainingComponent,
     StopTrainingComponent,
   ],
-  imports: [CommonModule, MaterialModule, FlexLayoutModule],
+  imports: [CommonModule, MaterialModule, FlexLayoutModule, FormsModule],
+  exports: [],
 })
 export class TrainingModule {}
