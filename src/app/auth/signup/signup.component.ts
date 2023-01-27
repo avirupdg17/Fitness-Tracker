@@ -1,5 +1,7 @@
+import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -10,7 +12,7 @@ export class SignupComponent implements OnInit {
   public signUpForm: FormGroup;
   public maxDate: Date;
   public hide = true;
-  constructor() {
+  constructor(private authService: AuthService) {
     this.signUpForm = new FormGroup({});
     this.maxDate = new Date();
   }
@@ -28,6 +30,10 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.signUpForm);
+    //console.log(this.signUpForm.value);
+    this.authService.registerUser({
+      email: this.signUpForm.get('emailId')?.value,
+      password: this.signUpForm.get('password')?.value,
+    });
   }
 }

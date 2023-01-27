@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class LoginComponent {
   public loginForm: FormGroup;
   public hide: boolean = true;
-  constructor() {
+  constructor(private authService: AuthService) {
     this.loginForm = new FormGroup({});
   }
   ngOnInit() {
@@ -23,6 +24,10 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    console.log(this.loginForm);
+    //console.log(this.loginForm);
+    this.authService.registerUser({
+      email: this.loginForm.get('emailId')?.value,
+      password: this.loginForm.get('password')?.value,
+    });
   }
 }
