@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../services/training.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -10,14 +10,14 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./new-training.component.scss'],
 })
 export class NewTrainingComponent implements OnInit {
-  public availableExercises: Exercise[] = [];
+  public availableExercises$:any;
   public exerciseSubscription: Subscription = new Subscription();
   constructor(private train: TrainingService) {}
   ngOnInit(): void {
     this.getAvailableTrainings();
   }
   getAvailableTrainings() {
-    this.availableExercises = this.train.getTraining();
+    this.availableExercises$ = this.train.getTraining();
   }
   startNewTraining(form: NgForm) {
     //console.log(form.value.training);

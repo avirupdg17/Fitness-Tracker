@@ -1,17 +1,30 @@
 import { Injectable } from '@angular/core';
 import { EXERCISES } from '../exercises';
 import { Exercise } from '../exercise.model';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
+import {
+  Firestore,
+  collectionData,
+  collection,
+  CollectionReference,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrainingService {
-  private availableExercises: Exercise[] = EXERCISES;
+  private availableExercises: Exercise[] = [];
   private currentExercise: any;
   private exercises: Exercise[] = [];
   public trainingStarted = new Subject<Exercise>();
-  constructor() {}
+  public exercises$: Observable<Exercise[]>;
+  constructor(private firestore: Firestore) {
+    const col = collection(
+      this.firestore,
+      'availableExercises'
+    ) as CollectionReference<Exercise>;
+    this.exercises$ = collectionData(col);
+  }
   startTraining(selectedId: string) {
     //console.log(selectedId);
     this.currentExercise = this.availableExercises.find(
@@ -44,7 +57,7 @@ export class TrainingService {
     this.updateTrainingData('completed');
   }
   getTraining() {
-    return this.availableExercises.slice();
+    return this.exercises$;
   }
 
   getRunningExercise() {
