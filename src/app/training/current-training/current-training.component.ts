@@ -31,7 +31,7 @@ export class CurrentTrainingComponent implements OnInit {
   }
   resumeTraining() {
     this.resume = false;
-    console.log(this.train.getRunningExercise().duration);
+    //console.log(this.train.getRunningExercise().duration);
     const step = (this.train.getRunningExercise().duration / 100) * 1000;
     this.timer = window.setInterval(() => {
       this.progress += 5;

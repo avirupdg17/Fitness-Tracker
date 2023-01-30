@@ -10,14 +10,17 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./new-training.component.scss'],
 })
 export class NewTrainingComponent implements OnInit {
-  public availableExercises$:any;
+  public availableExercises: Exercise[] = [];
   public exerciseSubscription: Subscription = new Subscription();
   constructor(private train: TrainingService) {}
   ngOnInit(): void {
     this.getAvailableTrainings();
   }
   getAvailableTrainings() {
-    this.availableExercises$ = this.train.getTraining();
+    this.train.getTraining();
+    this.exerciseSubscription = this.train.exercisesChanged.subscribe(
+      (exercises) => (this.availableExercises = exercises)
+    );
   }
   startNewTraining(form: NgForm) {
     //console.log(form.value.training);
