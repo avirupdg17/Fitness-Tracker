@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../services/training.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -9,7 +9,7 @@ import { NgForm } from '@angular/forms';
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.scss'],
 })
-export class NewTrainingComponent implements OnInit {
+export class NewTrainingComponent implements OnInit, OnDestroy {
   public availableExercises: Exercise[] = [];
   public exerciseSubscription: Subscription = new Subscription();
   constructor(private train: TrainingService) {}
@@ -25,5 +25,9 @@ export class NewTrainingComponent implements OnInit {
   startNewTraining(form: NgForm) {
     //console.log(form.value.training);
     this.train.startTraining(form.value.training);
+  }
+
+  ngOnDestroy(): void {
+    this.exerciseSubscription.unsubscribe();
   }
 }

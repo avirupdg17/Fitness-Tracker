@@ -8,6 +8,7 @@ import {
   CollectionReference,
   getDocs,
 } from '@angular/fire/firestore';
+import { addDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class TrainingService {
   private exercises: Exercise[] = [];
   public trainingStarted = new Subject<Exercise>();
   public exercisesChanged = new Subject<Exercise[]>();
+  public pastExercisesChanged = new Subject<Exercise[]>();
   constructor(private db: Firestore) {}
   startTraining(selectedId: string) {
     //console.log(selectedId);
@@ -32,7 +34,7 @@ export class TrainingService {
   }
 
   updateTrainingData(state: 'completed' | 'cancelled', progress: number = 100) {
-    this.exercises.push({
+    this.addExerciseDataInDatabase({
       ...this.currentExercise,
       duration: this.currentExercise.duration * (progress / 100),
       calories: this.currentExercise.calories * (progress / 100),
@@ -79,6 +81,32 @@ export class TrainingService {
   }
 
   getPastExercises() {
-    return this.exercises.slice();
+    const colRef = collection(
+      this.db,
+      'finishedexercises'
+    ) as CollectionReference<Exercise>;
+    from(getDocs(colRef))
+      .pipe(
+        map((documents: any) =>
+          documents.docs.map((doc: any) => {
+            return {
+              id: doc.id,
+              name: doc.data().name,
+              duration: doc.data().duration,
+              calories: doc.data().calories,
+              date: doc.data().date.toDate(),
+              state: doc.data().state,
+            };
+          })
+        )
+      )
+      .subscribe((exercises: Exercise[]) => {
+        //console.log(exercises);
+        this.exercises = exercises;
+        this.pastExercisesChanged.next([...this.exercises]);
+      });
+  }
+  private addExerciseDataInDatabase(exercise: Exercise) {
+    addDoc(collection(this.db, 'finishedexercises'), exercise);
   }
 }

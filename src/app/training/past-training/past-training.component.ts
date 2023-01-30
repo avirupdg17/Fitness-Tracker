@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,9 +16,10 @@ import { TrainingService } from '../services/training.service';
   templateUrl: './past-training.component.html',
   styleUrls: ['./past-training.component.scss'],
 })
-export class PastTrainingComponent implements OnInit, AfterViewInit {
+export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   public pastExercises: Exercise[] = [];
   public dataSource = new MatTableDataSource<Exercise>();
+  private pastExercises$: any;
   public displayedColumns: string[] = [
     'date',
     'name',
@@ -26,8 +33,14 @@ export class PastTrainingComponent implements OnInit, AfterViewInit {
   constructor(private trainService: TrainingService) {}
 
   ngOnInit(): void {
-    this.pastExercises = this.trainService.getPastExercises();
-    this.dataSource.data = this.pastExercises;
+    this.trainService.getPastExercises();
+    this.pastExercises$ = this.trainService.pastExercisesChanged.subscribe(
+      (pastExercises) => {
+        this.pastExercises = pastExercises;
+        console.log(pastExercises);
+        this.dataSource.data = this.pastExercises;
+      }
+    );
   }
 
   ngAfterViewInit(): void {
@@ -39,5 +52,9 @@ export class PastTrainingComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = (event.target as HTMLInputElement).value
       .trim()
       .toLowerCase();
+  }
+
+  ngOnDestroy(): void {
+    this.pastExercises$.unsubscribe();
   }
 }
