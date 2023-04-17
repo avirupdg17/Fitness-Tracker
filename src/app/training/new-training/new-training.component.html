@@ -12,6 +12,7 @@
       >
       <mat-card-content>
         <mat-form-field>
+          <mat-label>Please select Exercise</mat-label>
           <mat-select ngModel name="training" #training="ngModel" required>
             <mat-option
               *ngFor="let exercise of availableExercises"

@@ -1,4 +1,5 @@
 export interface Exercise {
+  uid: string;
   id: string;
   name: string;
   duration: number;

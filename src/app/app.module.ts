@@ -13,10 +13,9 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { TrainingModule } from './training/training.module';
 import { AuthModule } from './auth/auth.module';
 import { NavigationModule } from './navigation/navigation.module';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { firebaseConfig } from './firebase.config';
-import { config } from 'rxjs';
 
 @NgModule({
   declarations: [AppComponent, WelcomeComponent],

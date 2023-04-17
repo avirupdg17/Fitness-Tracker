@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Exercise } from './exercise.model';
+import { Exercise } from './model/exercise.model';
 import { TrainingService } from './services/training.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { TrainingService } from './services/training.service';
   styleUrls: ['./training.component.scss'],
 })
 export class TrainingComponent implements OnInit {
-  public ex: Exercise = { id: '', name: '', calories: 0, duration: 0 };
+  public ex: Exercise = { uid: '', id: '', name: '', calories: 0, duration: 0 };
   public started: boolean = false;
   public exerciseSubscription: Subscription = new Subscription();
   constructor(private trainS: TrainingService) {}

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Exercise } from '../exercise.model';
+import { Exercise } from '../model/exercise.model';
 import { TrainingService } from '../services/training.service';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';

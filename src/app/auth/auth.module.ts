@@ -6,9 +6,10 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AccessDeniedComponent } from './access-denied/access-denied.component';
 
 @NgModule({
-  declarations: [SignupComponent, LoginComponent],
+  declarations: [SignupComponent, LoginComponent, AccessDeniedComponent],
   imports: [
     CommonModule,
     MaterialModule,

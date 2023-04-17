@@ -1,4 +1,4 @@
-import { Exercise } from './exercise.model';
+import { Exercise } from './model/exercise.model';
 export const EXERCISES: Exercise[] = [
   { id: 'crunches', name: 'Crunches', duration: 30, calories: 8 },
   { id: 'touch-toes', name: 'Touch Toes', duration: 180, calories: 15 },

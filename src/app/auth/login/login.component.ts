@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AccessDeniedComponent } from '../access-denied/access-denied.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +13,11 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent {
   public loginForm: FormGroup;
   public hide: boolean = true;
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {
     this.loginForm = new FormGroup({});
   }
   ngOnInit() {
@@ -24,10 +31,33 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    //console.log(this.loginForm);
-    this.authService.registerUser({
-      email: this.loginForm.get('emailId')?.value,
-      password: this.loginForm.get('password')?.value,
-    });
+    console.log(this.loginForm);
+    this.authService
+      .loginUser({
+        email: this.loginForm.get('emailId')?.value,
+        password: this.loginForm.get('password')?.value,
+      })
+      .subscribe({
+        next: (value) => {
+          console.log(value);
+          this.authService.authChange.next(true);
+          this.router.navigate(['/training']);
+        },
+        error: (e) => {
+          this.authService.authChange.next(false);
+          //console.log(e.code);
+          //if (e.code == 'auth/user-not-found') {
+          this.dialog.open(AccessDeniedComponent, {
+            data: {
+              heading: 'Access Denied',
+              content:
+                'Invalid email or password, please enter valid credentials.',
+            },
+            width: '500px',
+            height: '150px',
+          });
+          //}
+        },
+      });
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Exercise } from '../exercise.model';
+import { Exercise } from '../model/exercise.model';
 import { Subject, from } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import {
@@ -47,16 +47,22 @@ export class TrainingService {
       calories: 0,
       duration: 0,
     };
-    this.trainingStarted.next(this.currentExercise);
+    this.trainingStarted.next({ ...this.currentExercise });
   }
   completeTraining() {
     this.updateTrainingData('completed');
   }
+
+  getRunningExercise() {
+    return { ...this.currentExercise };
+  }
+
+  private connectCollectionDatabase(colName: string) {
+    const colRef = collection(this.db, colName);
+    return colRef;
+  }
   getTraining() {
-    const colRef = collection(
-      this.db,
-      'availableExercises'
-    ) as CollectionReference<Exercise>;
+    const colRef = this.connectCollectionDatabase('availableExercises');
     from(getDocs(colRef))
       .pipe(
         map((documents: any) =>
@@ -76,17 +82,11 @@ export class TrainingService {
       });
   }
 
-  getRunningExercise() {
-    return { ...this.currentExercise };
-  }
-
   getPastExercises() {
-    const colRef = collection(
-      this.db,
-      'finishedexercises'
-    ) as CollectionReference<Exercise>;
+    const colRef = this.connectCollectionDatabase('finishedexercises');
     from(getDocs(colRef))
       .pipe(
+        tap((data) => console.log(data)),
         map((documents: any) =>
           documents.docs.map((doc: any) => {
             return {
@@ -107,6 +107,6 @@ export class TrainingService {
       });
   }
   private addExerciseDataInDatabase(exercise: Exercise) {
-    addDoc(collection(this.db, 'finishedexercises'), exercise);
+    addDoc(this.connectCollectionDatabase('finishedexercises'), exercise);
   }
 }
