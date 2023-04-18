@@ -12,6 +12,7 @@ import {
 import { addDoc } from 'firebase/firestore';
 import { Firestore, collection } from '@angular/fire/firestore';
 import { SessionService } from 'src/app/shared/services/session.service';
+import { TrainingService } from 'src/app/training/services/training.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private db: Firestore,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private trainingS: TrainingService
   ) {
     if (this.isAuth()) {
       this.successfulAuth();
@@ -62,6 +64,7 @@ export class AuthService {
         authData.email,
         authData.password
       );
+      console.log(userCredential);
       this.sessionService.setSession('user', {
         uid: userCredential.user.uid,
         displayName: userCredential.user.displayName,
@@ -82,6 +85,8 @@ export class AuthService {
   }
   logout() {
     this.sessionService.removeSession('user');
+    this.auth.signOut();
+    this.trainingS.cancelSubscription();
     this.authChange.next(false);
     this.router.navigate(['/login']);
   }

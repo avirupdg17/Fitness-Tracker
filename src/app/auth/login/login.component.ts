@@ -45,17 +45,17 @@ export class LoginComponent {
         } else {
           //console.log(val.error);
           //console.log(e);
-          if (val.error.code == 'auth/email-already-in-use') {
-            this.dialog.open(AccessDeniedComponent, {
-              data: {
-                heading: 'Access Denied',
-                content:
-                  'Invalid email or password, please enter valid credentials.',
-              },
-              width: '500px',
-              height: '150px',
-            });
-          }
+          //if (val.error.code == 'auth/email-already-in-use') {
+          this.dialog.open(AccessDeniedComponent, {
+            data: {
+              heading: 'Access Denied',
+              content:
+                'Invalid email or password, please enter valid credentials.',
+            },
+            width: '500px',
+            height: '150px',
+          });
+          //}
         }
       });
 

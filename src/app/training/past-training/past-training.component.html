@@ -1,11 +1,10 @@
+<p></p>
 <div fxLayoutAlign="center center">
   <mat-form-field fxFlex="40%">
-    <input
-      type="text"
-      matInput
-      (keyup)="doFilter($event)"
-      placeholder="Filter"
-    />
+    <input type="text" matInput (keyup)="doFilter($event)" />
+    <button mat-icon-button matSuffix>
+      <mat-icon>search</mat-icon>
+    </button>
   </mat-form-field>
 </div>
 <mat-table [dataSource]="dataSource" matSort>
