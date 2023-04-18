@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from '../model/exercise.model';
 import { Subject, from } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, filter } from 'rxjs/operators';
 import {
   Firestore,
   collection,
@@ -9,6 +9,7 @@ import {
   getDocs,
 } from '@angular/fire/firestore';
 import { addDoc } from 'firebase/firestore';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class TrainingService {
   public trainingStarted = new Subject<Exercise>();
   public exercisesChanged = new Subject<Exercise[]>();
   public pastExercisesChanged = new Subject<Exercise[]>();
-  constructor(private db: Firestore) {}
+  constructor(private db: Firestore, private sessionService: SessionService) {}
   startTraining(selectedId: string) {
     //console.log(selectedId);
     this.currentExercise = this.availableExercises.find(
@@ -40,6 +41,7 @@ export class TrainingService {
       calories: this.currentExercise.calories * (progress / 100),
       date: new Date(),
       state: state,
+      uid: this.sessionService.getSession('user')?.uid,
     });
     this.currentExercise = {
       id: '',
@@ -86,7 +88,6 @@ export class TrainingService {
     const colRef = this.connectCollectionDatabase('finishedexercises');
     from(getDocs(colRef))
       .pipe(
-        tap((data) => console.log(data)),
         map((documents: any) =>
           documents.docs.map((doc: any) => {
             return {
@@ -96,13 +97,16 @@ export class TrainingService {
               calories: doc.data().calories,
               date: doc.data().date.toDate(),
               state: doc.data().state,
+              uid: doc.data().uid,
             };
           })
         )
       )
       .subscribe((exercises: Exercise[]) => {
         //console.log(exercises);
-        this.exercises = exercises;
+        this.exercises = exercises.filter(
+          (ex) => ex.uid === this.sessionService.getSession('user')?.uid
+        );
         this.pastExercisesChanged.next([...this.exercises]);
       });
   }

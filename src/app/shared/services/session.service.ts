@@ -6,10 +6,13 @@ import { Injectable } from '@angular/core';
 export class SessionService {
   constructor() {}
 
-  getSession() {
-    return sessionStorage.getItem('uid');
+  getSession(sessioKey: string) {
+    if (sessionStorage[sessioKey]) return JSON.parse(sessionStorage[sessioKey]);
   }
-  setSession(uid: string) {
-    sessionStorage.setItem('uid', uid);
+  setSession(obj: string, data: any) {
+    sessionStorage.setItem(obj, JSON.stringify({ ...data }));
+  }
+  removeSession(sessioKey: string) {
+    sessionStorage.removeItem(sessioKey);
   }
 }

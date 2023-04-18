@@ -13,6 +13,9 @@
     <ul fxLayout class="navigation-items" fxLayoutGap="10px">
       <ng-container *ngIf="isAuth">
         <li>
+          <p>{{ username | uppercase }}</p>
+        </li>
+        <li>
           <a [routerLink]="['training']" mat-button>Training</a>
         </li>
         <li>

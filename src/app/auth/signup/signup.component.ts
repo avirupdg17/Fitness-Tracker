@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AccessDeniedComponent } from '../access-denied/access-denied.component';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-signup',
@@ -33,6 +34,7 @@ export class SignupComponent implements OnInit {
       ]),
       dateOfBirth: new FormControl('', [Validators.required]),
       agreement: new FormControl('', [Validators.requiredTrue]),
+      username: new FormControl('', [Validators.required]),
     });
   }
 
@@ -42,19 +44,16 @@ export class SignupComponent implements OnInit {
       .registerUser({
         email: this.signUpForm.get('emailId')?.value,
         password: this.signUpForm.get('password')?.value,
+        username: this.signUpForm.get('username')?.value,
         dateOfBirth: this.signUpForm.get('dateOfBirth')?.value,
       })
-      .subscribe({
-        next: (value) => {
-          console.log(value);
-          this.authService.authChange.next(true);
+      .then((val) => {
+        if (val.isSuccessful) {
           this.router.navigate(['/training']);
-        },
-        error: (e) => {
-          this.authService.authChange.next(false);
-          console.log(e.code);
-          console.log(e);
-          if (e.code == 'auth/email-already-in-use') {
+        } else {
+          //console.log(val.error);
+          //console.log(e);
+          if (val.error.code == 'auth/email-already-in-use') {
             this.dialog.open(AccessDeniedComponent, {
               data: {
                 heading: 'User already exists',
@@ -65,7 +64,7 @@ export class SignupComponent implements OnInit {
               height: '180px',
             });
           }
-        },
+        }
       });
   }
 }

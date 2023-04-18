@@ -7,6 +7,13 @@
     (ngSubmit)="onSubmit()"
   >
     <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput placeholder="Username" formControlName="username" />
+      <mat-error *ngIf="signUpForm.get('username')?.invalid"
+        >Username is mandatory</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Email</mat-label>
       <input
         type="email"

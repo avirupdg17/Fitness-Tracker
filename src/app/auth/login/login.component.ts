@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AccessDeniedComponent } from '../access-denied/access-denied.component';
 import { Router } from '@angular/router';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private sessionService: SessionService
   ) {
     this.loginForm = new FormGroup({});
   }
@@ -31,33 +33,54 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    console.log(this.loginForm);
+    //console.log(this.loginForm);
     this.authService
       .loginUser({
         email: this.loginForm.get('emailId')?.value,
         password: this.loginForm.get('password')?.value,
       })
-      .subscribe({
-        next: (value) => {
-          console.log(value);
-          this.authService.authChange.next(true);
+      .then((val) => {
+        if (val.isSuccessful) {
           this.router.navigate(['/training']);
-        },
-        error: (e) => {
-          this.authService.authChange.next(false);
-          //console.log(e.code);
-          //if (e.code == 'auth/user-not-found') {
-          this.dialog.open(AccessDeniedComponent, {
-            data: {
-              heading: 'Access Denied',
-              content:
-                'Invalid email or password, please enter valid credentials.',
-            },
-            width: '500px',
-            height: '150px',
-          });
-          //}
-        },
+        } else {
+          //console.log(val.error);
+          //console.log(e);
+          if (val.error.code == 'auth/email-already-in-use') {
+            this.dialog.open(AccessDeniedComponent, {
+              data: {
+                heading: 'Access Denied',
+                content:
+                  'Invalid email or password, please enter valid credentials.',
+              },
+              width: '500px',
+              height: '150px',
+            });
+          }
+        }
       });
+
+    // .subscribe({
+    //   next: (value) => {
+    //     console.log(value);
+    //     this.authService.authChange.next(true);
+    //     this.sessionService.setSession(value.user.uid);
+    //     this.router.navigate(['/training']);
+    //   },
+    //   error: (e) => {
+    //     this.authService.authChange.next(false);
+    //     //console.log(e.code);
+    //     //if (e.code == 'auth/user-not-found') {
+    //     this.dialog.open(AccessDeniedComponent, {
+    //       data: {
+    //         heading: 'Access Denied',
+    //         content:
+    //           'Invalid email or password, please enter valid credentials.',
+    //       },
+    //       width: '500px',
+    //       height: '150px',
+    //     });
+    //     //}
+    //   },
+    // });
   }
 }

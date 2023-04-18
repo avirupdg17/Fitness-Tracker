@@ -7,6 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-header',
@@ -15,13 +16,21 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public isAuth: boolean = false;
+  public username: string = '';
+  private loggedIn: boolean = false;
   private authSubscription: Subscription = new Subscription();
   @Output() sideToggleClicked = new EventEmitter<void>();
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private sessionService: SessionService
+  ) {}
   ngOnInit(): void {
     this.authSubscription = this.authService.authChange.subscribe(
       (authStatus) => {
         this.isAuth = authStatus;
+        if (this.isAuth) {
+          this.username = this.sessionService.getSession('user')?.displayName;
+        }
       }
     );
   }
